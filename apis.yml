@@ -1,8 +1,28 @@
 aid: avarra
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source: []
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/avarra.png
 name: Avarra
-description: Avarra is a company surfaced as a portfolio company of lightspeed-venture-partners and added
-  to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment
-  pipeline.
+description: >-
+  Avarra is an AI-powered sales training and enablement platform that helps
+  revenue teams onboard, coach, and certify sales representatives at scale. The
+  platform turns real sales conversations into AI-driven role-play simulations,
+  delivers personalized coaching feedback, standardizes sales methodology across
+  teams and regions, and reports certification and performance analytics. Its
+  workflow moves through five stages: Capture, Train, Practice, Certify, and
+  Performance Insights, with the stated goal of cutting new-hire ramp time in
+  half. Avarra is a Lightspeed Venture Partners portfolio company. As of this
+  profile Avarra publishes a marketing and product site but no public developer
+  API, documentation portal, or SDKs.
 url: https://raw.githubusercontent.com/api-evangelist/avarra/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -12,12 +32,37 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-18'
 tags:
 - Company
+- Sales Enablement
+- Sales Training
+- AI
+- Coaching
+- Role-Play Simulation
+- Revenue Operations
+- Onboarding
 apis: []
+common:
+- type: DomainSecurity
+  url: security/avarra-domain-security.yml
+- type: Website
+  url: https://www.avarra.ai
+- type: SignUp
+  url: https://www.avarra.ai/request-a-demo
+- type: Support
+  url: mailto:support@avarra.ai
+- type: PrivacyPolicy
+  url: https://www.avarra.ai/legal/privacy-policy
+- type: Compliance
+  url: https://www.avarra.ai
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence
