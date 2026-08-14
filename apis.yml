@@ -13,16 +13,20 @@ accessModel:
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/avarra.png
 name: Avarra
 description: >-
-  Avarra is an AI-powered sales training and enablement platform that helps
-  revenue teams onboard, coach, and certify sales representatives at scale. The
-  platform turns real sales conversations into AI-driven role-play simulations,
-  delivers personalized coaching feedback, standardizes sales methodology across
-  teams and regions, and reports certification and performance analytics. Its
-  workflow moves through five stages: Capture, Train, Practice, Certify, and
-  Performance Insights, with the stated goal of cutting new-hire ramp time in
-  half. Avarra is a Lightspeed Venture Partners portfolio company. As of this
-  profile Avarra publishes a marketing and product site but no public developer
-  API, documentation portal, or SDKs.
+  Avarra is an AI-powered sales training and enablement platform, operated by Ramp
+  Systems, Inc., that helps revenue teams onboard, coach, and certify sales
+  representatives at scale. The platform turns real sales conversations into
+  AI-avatar role-play simulations delivered over Zoom, gives reps unlimited practice
+  reps with instant coaching feedback, standardizes sales methodology across teams and
+  regions, and reports certification and performance analytics through manager
+  dashboards. Its workflow moves through five stages: Capture, Train, Practice,
+  Certify, and Performance Insights, with the stated goal of cutting new-hire ramp
+  time in half. Avarra is a Lightspeed Venture Partners portfolio company that exited
+  stealth with $8M in seed funding. Avarra runs a production API at api.avarra.ai that
+  publishes RFC 8414 OAuth 2.0 authorization server metadata and an RFC 7517 JWKS
+  anonymously, but the entire /v1 resource surface is closed behind OAuth 2.0
+  client-credentials access and the company publishes no OpenAPI, developer portal,
+  API reference, SDKs, or pricing.
 url: https://raw.githubusercontent.com/api-evangelist/avarra/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -32,7 +36,7 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-18'
+modified: '2026-08-14'
 tags:
 - Company
 - Sales Enablement
@@ -42,7 +46,38 @@ tags:
 - Role-Play Simulation
 - Revenue Operations
 - Onboarding
-apis: []
+- Sales Readiness
+- Conversation Intelligence
+apis:
+- aid: avarra-api
+  name: Avarra API
+  description: >-
+    The production Avarra API, served from api.avarra.ai behind an AWS application
+    load balancer. Every path under /v1/ is protected and returns a JSON 401 envelope
+    without a bearer token; tokens are issued from /oauth/token using the OAuth 2.0
+    client_credentials grant with client_secret_basic or client_secret_post client
+    authentication. The authorization server advertises itself through RFC 8414
+    metadata at /.well-known/oauth-authorization-server and publishes its signing keys
+    at /.well-known/jwks.json, both anonymously. An anonymous /health endpoint returns
+    {"status":"ok"}. Avarra publishes no OpenAPI, no API reference and no developer
+    documentation, so the operation surface behind the auth wall is not publicly
+    described; access is granted through a commercial relationship rather than
+    self-serve signup.
+  humanURL: https://www.avarra.ai/product
+  baseURL: https://api.avarra.ai
+  tags:
+  - Sales Enablement
+  - Sales Training
+  - AI
+  properties:
+  - type: Authentication
+    url: authentication/avarra-authentication.yml
+  - type: WellKnown
+    url: well-known/avarra-well-known.yml
+  - type: Conventions
+    url: conventions/avarra-conventions.yml
+  - type: ErrorCatalog
+    url: errors/avarra-problem-types.yml
 common:
 - type: DomainSecurity
   url: security/avarra-domain-security.yml
@@ -55,14 +90,70 @@ common:
 - type: PrivacyPolicy
   url: https://www.avarra.ai/legal/privacy-policy
 - type: Compliance
-  url: https://www.avarra.ai
+  url: https://www.avarra.ai/product
+- type: TermsOfService
+  url: https://www.avarra.ai/msa
+- type: Blog
+  url: https://www.avarra.ai/blog
+- type: StatusPage
+  url: https://status.avarra.ai
+- type: Authentication
+  url: authentication/avarra-authentication.yml
+- type: WellKnown
+  url: well-known/avarra-well-known.yml
+- type: Conventions
+  url: conventions/avarra-conventions.yml
+- type: ErrorCatalog
+  url: errors/avarra-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/avarra-lifecycle.yml
+- type: Conformance
+  url: conformance/avarra-conformance.yml
+- type: Plans
+  url: plans/avarra-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/avarra-rate-limits.yml
+- type: LLMsTxt
+  url: llms/avarra-llms.txt
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 x-enrichment:
-  date: '2026-07-19'
-  status: backfilled
+  date: '2026-08-14'
+  status: enriched
+  artifacts_added: 11
   pass: local-v1
-  note: backfilled from .gitignore signal + verified work evidence
+x-contract-discovery:
+  checked: '2026-08-14'
+  finding: >-
+    The prior profile recorded "no public developer API"; that was wrong. api.avarra.ai
+    is a live first-party API host that serves RFC 8414 OAuth authorization server
+    metadata and an RFC 7517 JWKS anonymously, while every /v1 resource path returns a
+    JSON 401 and every unrouted path is refused by the AWS load balancer with a
+    plain-text 403. No OpenAPI, GraphQL SDL, MCP server or A2A agent card is reachable
+    on any Avarra host, and none is published elsewhere.
+  probes:
+  - url: https://api.avarra.ai/.well-known/oauth-authorization-server
+    status: 200
+  - url: https://api.avarra.ai/.well-known/jwks.json
+    status: 200
+  - url: https://api.avarra.ai/health
+    status: 200
+  - url: https://api.avarra.ai/v1/openapi.json
+    status: 401
+  - url: https://api.avarra.ai/openapi.json
+    status: 403
+  - url: https://api.avarra.ai/graphql
+    status: 403
+  - url: https://api.avarra.ai/mcp
+    status: 403
+  - url: https://api.avarra.ai/.well-known/agent-card.json
+    status: 404
+  - url: https://www.avarra.ai/.well-known/agent-card.json
+    status: 404
+  - url: https://www.avarra.ai/llms.txt
+    status: 404
+  - url: https://app.avarra.ai/.well-known/agent.json
+    status: 404
