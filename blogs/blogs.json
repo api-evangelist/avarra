@@ -1,0 +1,14 @@
+{
+  "repo": "avarra",
+  "feeds": [
+    {
+      "source": "https://www.avarra.ai/msa",
+      "feed_url": "https://www.avarra.ai/msa",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-08-15T12:22:01Z"
+}
