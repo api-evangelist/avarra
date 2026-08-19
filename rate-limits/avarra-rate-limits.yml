@@ -1,0 +1,35 @@
+generated: '2026-08-14'
+method: probed
+source: live responses from https://api.avarra.ai on 2026-08-14
+limit_count: 0
+limits: []
+headers: []
+status_on_exhaustion: unknown
+retry_after: false
+note: >-
+  No rate limits are documented (Avarra publishes no developer documentation at all)
+  and none are signalled on the wire. The observed responses from api.avarra.ai carry
+  no X-RateLimit-*, RateLimit- (RFC 9331 draft) or Retry-After header. An agent
+  calling this API has no runtime budget signal and would have to discover throttling
+  by being throttled. This is an honest zero, measured - not an unchecked field.
+observed_response_headers:
+- request: GET https://api.avarra.ai/health
+  status: 200
+  headers:
+  - date
+  - content-type
+  - content-length
+  - vary
+- request: GET https://api.avarra.ai/v1/me
+  status: 401
+  headers:
+  - date
+  - content-type
+  - content-length
+  - vary
+unrelated_signal:
+  note: >-
+    https://status.avarra.ai returns "ratelimit-policy: 1000; w=60", but that host is
+    a Better Stack hosted status page and the header is Better Stack's, not Avarra's
+    API. It is recorded here only so a later pass does not mistake it for an Avarra
+    API limit.

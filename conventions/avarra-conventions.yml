@@ -1,0 +1,96 @@
+generated: '2026-08-14'
+method: probed
+source: live responses from https://api.avarra.ai on 2026-08-14
+note: >-
+  Avarra publishes no API documentation and no OpenAPI, so these conventions are
+  derived entirely from what the production API host actually returned to
+  unauthenticated requests. Anything that cannot be observed without a credential is
+  recorded as unknown rather than guessed - in particular pagination, expansion,
+  metadata and idempotency, none of which are visible from outside the auth wall.
+authentication:
+  style: oauth2-client-credentials
+  header: 'Authorization: Bearer <token>'
+  token_endpoint: https://api.avarra.ai/oauth/token
+  detail: authentication/avarra-authentication.yml
+versioning:
+  scheme: uri-path
+  current: v1
+  evidence: >-
+    Every path under https://api.avarra.ai/v1/ reaches the application and returns the
+    JSON 401 envelope; /v2 is rejected at the load balancer with a 403 "Access denied",
+    so v1 is the only routed version.
+  policy_url: null
+  header_negotiation: false
+error_envelope:
+  format: custom-json
+  rfc9457: false
+  content_type: application/json
+  resource_shape:
+    fields:
+    - error
+    - message
+    example: '{"error":"unauthorized","message":"missing or invalid authorization header"}'
+  oauth_shape:
+    spec: RFC 6749 section 5.2
+    fields:
+    - error
+    - error_description
+    example: '{"error":"invalid_request","error_description":"missing client credentials"}'
+  note: >-
+    Two different envelopes coexist. The OAuth endpoints use the standard RFC 6749
+    error/error_description pair; the /v1 resource endpoints use a non-standard
+    error/message pair. Neither is application/problem+json.
+  detail: errors/avarra-problem-types.yml
+edge_behaviour:
+  load_balancer: awselb/2.0
+  unrouted_path_status: 403
+  unrouted_path_body: Access denied
+  unrouted_path_content_type: text/plain; charset=utf-8
+  note: >-
+    Paths outside the routed surface (/, /docs, /openapi.json, /graphql, /mcp,
+    /llms.txt, /api, /webhooks, /events, /v2) are refused by the AWS load balancer
+    with a plain-text 403 before reaching the application. A 403 here is a routing
+    result, not an authorization result, and must not be read as "the resource exists
+    but you lack permission".
+health_check:
+  path: /health
+  status: 200
+  body: '{"status":"ok"}'
+  authenticated: false
+idempotency:
+  supported: unknown
+  header: null
+  evidence: >-
+    No idempotency key header is documented and no write operation is reachable
+    without a credential, so idempotency support can be neither confirmed nor denied
+    from the public surface. No Idempotency pointer is emitted.
+pagination:
+  style: unknown
+  evidence: no collection endpoint is reachable unauthenticated and no docs are published
+field_expansion:
+  supported: unknown
+metadata:
+  supported: unknown
+request_tracing:
+  request_id_header: false
+  evidence: >-
+    Neither the 200 /health response nor the 401 /v1 responses carry a request-id,
+    trace-id or correlation-id header. Response headers observed were limited to date,
+    content-type, content-length and vary.
+rate_limit_signaling:
+  headers: []
+  status_on_exhaustion: unknown
+  evidence: >-
+    No X-RateLimit-*, RateLimit-* or Retry-After header appeared on any observed
+    response from api.avarra.ai.
+  detail: rate-limits/avarra-rate-limits.yml
+content_negotiation:
+  request: application/x-www-form-urlencoded accepted at the token endpoint
+  response: application/json
+  vary: Accept-Encoding
+cross_links:
+  authentication: authentication/avarra-authentication.yml
+  errors: errors/avarra-problem-types.yml
+  lifecycle: lifecycle/avarra-lifecycle.yml
+  rate_limits: rate-limits/avarra-rate-limits.yml
+  well_known: well-known/avarra-well-known.yml

@@ -1,0 +1,89 @@
+generated: '2026-08-14'
+method: probed
+source: live responses from https://api.avarra.ai on 2026-08-14
+format: custom-json
+rfc9457: false
+note: >-
+  There is no OpenAPI to derive 4xx/5xx responses from and no published error
+  reference, so this catalog records only error responses actually observed on the
+  wire against the production host. It is deliberately short - it is a measurement,
+  not an inventory. Codes reachable only behind a credential are not represented.
+envelopes:
+- id: resource-error
+  scope: /v1/* resource endpoints
+  content_type: application/json
+  fields:
+  - name: error
+    type: string
+    description: machine-readable error slug
+  - name: message
+    type: string
+    description: human-readable explanation
+- id: oauth-error
+  scope: /oauth/token, /oauth/introspect
+  spec: RFC 6749 section 5.2
+  content_type: application/json
+  fields:
+  - name: error
+    type: string
+  - name: error_description
+    type: string
+problems:
+- status: 401
+  error: unauthorized
+  title: Missing or invalid authorization header
+  envelope: resource-error
+  body: '{"error":"unauthorized","message":"missing or invalid authorization header"}'
+  observed_on: GET https://api.avarra.ai/v1/me
+  remediation: >-
+    Obtain a bearer token from https://api.avarra.ai/oauth/token using the
+    client_credentials grant and send it as Authorization: Bearer <token>.
+  note: >-
+    No WWW-Authenticate challenge header accompanies this response, so the required
+    realm and scope are not discoverable from the error.
+- status: 401
+  error: invalid_request
+  title: Missing client credentials
+  envelope: oauth-error
+  body: '{"error":"invalid_request","error_description":"missing client credentials"}'
+  observed_on: POST https://api.avarra.ai/oauth/token
+  remediation: >-
+    Present client credentials using client_secret_basic (HTTP Basic) or
+    client_secret_post, both advertised in the authorization server metadata.
+  note: >-
+    RFC 6749 specifies invalid_request as a 400; Avarra returns it as a 401. A strict
+    client keying off the status code alone will read this as an authentication
+    failure rather than a malformed request.
+- status: 403
+  error: null
+  title: Access denied
+  envelope: none
+  content_type: text/plain; charset=utf-8
+  body: Access denied
+  observed_on: GET https://api.avarra.ai/ and every unrouted path
+  emitted_by: awselb/2.0
+  remediation: The path is not routed. Use a path under /v1/ or the /oauth/ endpoints.
+  note: >-
+    Emitted by the AWS load balancer, not the application. It carries no JSON envelope
+    and signals "no such route", not "insufficient permission".
+- status: 404
+  error: null
+  title: 404 page not found
+  envelope: none
+  content_type: text/plain; charset=utf-8
+  body: 404 page not found
+  observed_on: GET https://api.avarra.ai/.well-known/openid-configuration
+  remediation: The document is not served. Only oauth-authorization-server and jwks.json
+    exist under /.well-known/.
+- status: 405
+  error: null
+  title: Method not allowed
+  envelope: none
+  observed_on: GET https://api.avarra.ai/oauth/token and GET /oauth/introspect
+  remediation: Use POST. Both OAuth endpoints are POST-only.
+gaps:
+- No application/problem+json (RFC 9457) representation on any observed response.
+- No error type URIs, no documentation URIs, no error code registry published.
+- Three different error shapes across one API surface (resource JSON, OAuth JSON,
+  load-balancer plain text).
+- No WWW-Authenticate header on 401, so RFC 6750 scope discovery is not possible.

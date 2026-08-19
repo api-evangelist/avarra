@@ -1,0 +1,103 @@
+generated: '2026-08-14'
+method: probed
+source: >-
+  https://api.avarra.ai/.well-known/oauth-authorization-server,
+  https://api.avarra.ai/.well-known/jwks.json, live endpoint probes, and
+  https://www.avarra.ai/product
+note: >-
+  Every conformance claim below is anchored to a document fetched or a response
+  observed on 2026-08-14. Claims Avarra makes about itself (SOC 2, GDPR) are recorded
+  as published claims with the page they appear on, and are distinguished from
+  standards conformance we could verify on the wire.
+standards:
+- id: oauth2
+  spec: RFC 6749
+  conforms: true
+  evidence: >-
+    Authorization server metadata declares grant_types_supported
+    [client_credentials]; the token endpoint returns an RFC 6749 section 5.2 error
+    object (error / error_description).
+  deviation: >-
+    invalid_request is returned with HTTP 401; RFC 6749 specifies 400 for that error
+    code.
+- id: rfc8414-oauth-authorization-server-metadata
+  spec: RFC 8414
+  conforms: true
+  evidence: >-
+    https://api.avarra.ai/.well-known/oauth-authorization-server returns 200
+    application/json with issuer, token_endpoint, jwks_uri,
+    grant_types_supported and token_endpoint_auth_methods_supported.
+- id: rfc7517-jwks
+  spec: RFC 7517
+  conforms: true
+  evidence: >-
+    https://api.avarra.ai/.well-known/jwks.json returns 200 with a single RSA key
+    carrying kty, kid, n and e.
+  deviation: the key omits the optional "alg" and "use" members
+- id: rfc7662-token-introspection
+  spec: RFC 7662
+  conforms: partial
+  evidence: >-
+    introspection_endpoint https://api.avarra.ai/oauth/introspect is advertised and
+    responds to POST; the response body cannot be verified without a credential.
+- id: rfc6750-bearer-token-usage
+  spec: RFC 6750
+  conforms: false
+  evidence: >-
+    The 401 from /v1/* carries no WWW-Authenticate header, which RFC 6750 section 3
+    requires of a protected resource rejecting a request.
+- id: rfc9728-oauth-protected-resource-metadata
+  spec: RFC 9728
+  conforms: false
+  evidence: /.well-known/oauth-protected-resource returns 404 on api.avarra.ai
+- id: oidc-discovery
+  spec: OpenID Connect Discovery 1.0
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 404 on api.avarra.ai
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    Error responses use a bespoke {error, message} JSON object, not
+    application/problem+json.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt returns 404 on every Avarra host
+- id: openapi
+  conforms: false
+  evidence: >-
+    No OpenAPI or Swagger document is served from api.avarra.ai, www.avarra.ai,
+    app.avarra.ai or app.ramp.systems.
+- id: asyncapi
+  conforms: false
+  evidence: no event, streaming or webhook surface is documented or reachable
+- id: mcp
+  conforms: false
+  evidence: >-
+    /mcp is refused at the load balancer (403) and /v1/mcp returns the standard 401
+    envelope; no MCP server is advertised anywhere.
+- id: a2a
+  conforms: false
+  evidence: >-
+    /.well-known/agent-card.json and /.well-known/agent.json 404 on every host; no
+    agent card is published.
+compliance_claims:
+- id: soc2-type-2
+  claim: SOC 2 Type 2 Compliant
+  published_at: https://www.avarra.ai/product
+  verified_by_api_evangelist: false
+  note: >-
+    Stated verbatim on Avarra's product page. No trust center, no report request
+    workflow and no auditor is named, so the claim is recorded as published, not
+    verified. probe-security-programs.py found no trust center on trust.avarra.ai,
+    security.avarra.ai, /trust, /security or /compliance.
+- id: gdpr
+  claim: GDPR alignment
+  published_at: https://www.avarra.ai/product
+  verified_by_api_evangelist: false
+- id: ccpa
+  claim: >-
+    The Master Service Agreement commits to GDPR and CCPA compliance and states Ramp
+    Systems "shall not sell Customer Data or use Customer Data to train or develop any
+    publicly available artificial intelligence models."
+  published_at: https://www.avarra.ai/msa
+  verified_by_api_evangelist: false

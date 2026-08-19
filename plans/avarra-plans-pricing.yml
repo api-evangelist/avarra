@@ -1,0 +1,27 @@
+generated: '2026-08-14'
+method: searched
+source: https://www.avarra.ai/ (full site + sitemap.xml walk, 2026-08-14)
+plan_count: 0
+currency: null
+plans: []
+note: >-
+  Avarra publishes no pricing page and no plan tiers. https://www.avarra.ai/pricing
+  returns 404, and the sitemap at https://www.avarra.ai/sitemap.xml lists 26 URLs with
+  no pricing, plans or billing page among them. The only commercial entry point is
+  https://www.avarra.ai/request-a-demo, a HubSpot demo-request form. The Master
+  Service Agreement (https://www.avarra.ai/msa) references an Order Form for fees
+  rather than publishing rates. This is an enterprise contact-sales motion with zero
+  published pricing, not a gap in this probe.
+sales_motion: contact-sales
+self_serve: false
+free_tier: false
+trial: unknown
+evidence:
+- url: https://www.avarra.ai/pricing
+  status: 404
+- url: https://www.avarra.ai/sitemap.xml
+  status: 200
+  finding: 26 URLs, none pricing-related
+- url: https://www.avarra.ai/request-a-demo
+  status: 200
+  finding: demo request form is the only commercial entry point

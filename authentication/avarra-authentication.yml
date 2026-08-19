@@ -1,0 +1,86 @@
+generated: '2026-08-14'
+method: probed
+source: https://api.avarra.ai/.well-known/oauth-authorization-server
+note: >-
+  Avarra publishes no OpenAPI and no developer documentation, so this profile is read
+  directly off the RFC 8414 Authorization Server Metadata document the API host serves
+  anonymously, plus the live error envelopes returned by the token, introspection and
+  /v1 resource endpoints. Every field below was observed on the wire on 2026-08-14 -
+  none of it is inferred from marketing copy.
+summary:
+  types:
+  - oauth2
+  oauth2_flows:
+  - clientCredentials
+  api_key_in: []
+  public_docs: false
+  discovery: RFC 8414 authorization server metadata
+schemes:
+- name: oauth2ClientCredentials
+  type: oauth2
+  sources:
+  - well-known/avarra-oauth-authorization-server.json
+  issuer: https://api.avarra.ai
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api.avarra.ai/oauth/token
+    scopes: {}
+    note: >-
+      The authorization server metadata declares no scopes_supported and the token
+      endpoint is not anonymously enumerable, so no scope vocabulary is published.
+      No scopes/ artifact is emitted for this provider.
+  token_endpoint_auth_methods:
+  - client_secret_basic
+  - client_secret_post
+  introspection_endpoint: https://api.avarra.ai/oauth/introspect
+  jwks_uri: https://api.avarra.ai/.well-known/jwks.json
+  response_types_supported: []
+  authorization_endpoint: null
+resource_server:
+  base: https://api.avarra.ai
+  version_prefix: /v1
+  bearer_header: Authorization
+  unauthenticated_status: 401
+  unauthenticated_body: '{"error":"unauthorized","message":"missing or invalid authorization
+    header"}'
+  www_authenticate_header: false
+  note: >-
+    The resource server returns a 401 with a JSON envelope but does NOT emit a
+    WWW-Authenticate challenge header, so an RFC 6750 client cannot discover the
+    realm or the required scope from the response. There is also no
+    /.well-known/oauth-protected-resource (RFC 9728) document, so the resource
+    server does not advertise its authorization server. Both are gaps a client has
+    to be told about out of band.
+jwks:
+  url: https://api.avarra.ai/.well-known/jwks.json
+  file: well-known/avarra-jwks.json
+  keys: 1
+  kty: RSA
+  kid: 5d22a766-d768-41e0-bbfc-ac0aa04afe90
+  alg_declared: false
+  use_declared: false
+  note: >-
+    Public signing key set - published deliberately for token verification. The key
+    entry omits "alg" and "use", which RFC 7517 makes optional but which verifiers
+    normally rely on.
+observed:
+- request: GET https://api.avarra.ai/.well-known/oauth-authorization-server
+  status: 200
+- request: GET https://api.avarra.ai/.well-known/jwks.json
+  status: 200
+- request: POST https://api.avarra.ai/oauth/token (grant_type=client_credentials, no
+    credentials)
+  status: 401
+  body: '{"error":"invalid_request","error_description":"missing client credentials"}'
+- request: POST https://api.avarra.ai/oauth/introspect (no credentials)
+  status: 401
+  body: '{"error":"invalid_request","error_description":"missing client credentials"}'
+- request: GET https://api.avarra.ai/oauth/authorize
+  status: 404
+- request: GET https://api.avarra.ai/v1/me
+  status: 401
+docs: null
+docs_note: >-
+  Avarra publishes no authentication documentation. /docs, /developers, /api and
+  /integrations on www.avarra.ai all return 404. Credentials are presumably issued
+  through the commercial relationship (request-a-demo).

@@ -1,0 +1,67 @@
+generated: '2026-08-14'
+method: searched
+source: https://status.avarra.ai/ + https://www.avarra.ai/msa + live probes of https://api.avarra.ai
+note: >-
+  Avarra runs a real, publicly reachable status page but publishes no versioning
+  policy, no deprecation policy and no SLA. The version scheme below is observed from
+  the routed API surface, not from a published document.
+versioning:
+  scheme: uri-path
+  current: v1
+  docs: null
+  evidence: >-
+    https://api.avarra.ai/v1/* is routed to the application (returns the JSON 401
+    envelope); https://api.avarra.ai/v2 is refused at the load balancer with 403.
+  policy_published: false
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: unknown
+  deprecation_header: unknown
+  evidence: >-
+    RFC 8594 Sunset / Deprecation header support cannot be observed because no
+    resource returns 200 without a credential, and no deprecation policy page exists
+    on any Avarra host.
+sla:
+  url: null
+  uptime_target: null
+  note: >-
+    The Master Service Agreement (https://www.avarra.ai/msa, effective 2026-01-01,
+    entity Ramp Systems, Inc.) contains no uptime commitment. It states only that
+    Ramp Systems "will use reasonable and appropriate measures designed to protect the
+    Service against virus attacks, hacking, and denial of service interruptions" and
+    disclaims liability for interruptions beyond its reasonable control.
+support:
+  channel: email
+  contact: support@avarra.ai
+  hours: weekdays 09:00-17:00 Pacific, excluding U.S. federal holidays
+  source: https://www.avarra.ai/msa
+status_page:
+  url: https://status.avarra.ai
+  status: 200
+  provider: Better Stack
+  components:
+  - Website
+  - app.ramp.systems
+  history_window_observed: 2026-05-17 to 2026-08-14, all days operational
+  uptime_reported: 100% for app.ramp.systems
+  incidents_feed: https://status.avarra.ai (previous incidents linked in page nav)
+  rss: false
+  api_component_listed: false
+  note: >-
+    The status page tracks the marketing website and the application host
+    app.ramp.systems. It does NOT list api.avarra.ai as a component, so the API
+    surface itself is not covered by the published status signal. app.ramp.systems is
+    Avarra's own application origin - it serves /img/avarra-logo-white.svg and CNAMEs
+    to the same AWS load balancer as app.avarra.ai, and the MSA names Ramp Systems,
+    Inc. as the operating entity.
+changelog:
+  url: null
+  published: false
+  note: >-
+    https://www.avarra.ai/blog carries dated thought-leadership articles (two as of
+    this probe) but is not a product changelog or release-notes surface. No
+    changelog/ artifact is emitted.
+deprecated_operations: []
+deprecated_operations_note: no OpenAPI is published, so no operation-level deprecation
+  can be derived

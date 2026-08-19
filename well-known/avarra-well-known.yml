@@ -1,0 +1,65 @@
+generated: '2026-08-14'
+method: searched
+source: live probes of every Avarra host on 2026-08-14
+note: >-
+  Two real documents are served from the Avarra API host. api.avarra.ai publishes
+  RFC 8414 OAuth 2.0 Authorization Server Metadata and an RFC 7517 JWKS, both as
+  application/json with real content. Everything else 404s. The www marketing host
+  (Webflow) answers every /.well-known/* path with an HTML body reading
+  "Invalid .well-known request" under a 404 status, and app.avarra.ai returns the
+  SPA shell under a 404 - neither is a served document, and neither is counted here.
+hosts:
+- host: https://api.avarra.ai
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    content_type: application/json
+    file: avarra-oauth-authorization-server.json
+    spec: RFC 8414
+  - path: /.well-known/jwks.json
+    status: 200
+    content_type: application/json
+    file: avarra-jwks.json
+    spec: RFC 7517
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://www.avarra.ai
+  note: Webflow catch-all - HTML body under a 404 status, not a served document
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://app.avarra.ai
+  note: application SPA shell under a 404 status, not a served document
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+summary:
+  documents_served: 2
+  hosts_probed: 3
+  security_txt: false
+  api_catalog: false
+  agent_card: false
