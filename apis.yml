@@ -41,6 +41,17 @@ tags:
 - Company
 - Sales Enablement
 - Sales Training
+- Artificial Intelligence
+- Coaching
+- Role-Play Simulation
+- Revenue Operations
+- Onboarding
+- Sales Readiness
+- Conversation Intelligence
+tags_raw:
+- Company
+- Sales Enablement
+- Sales Training
 - AI
 - Coaching
 - Role-Play Simulation
@@ -66,6 +77,10 @@ apis:
   humanURL: https://www.avarra.ai/product
   baseURL: https://api.avarra.ai
   tags:
+  - Sales Enablement
+  - Sales Training
+  - Artificial Intelligence
+  tags_raw:
   - Sales Enablement
   - Sales Training
   - AI
