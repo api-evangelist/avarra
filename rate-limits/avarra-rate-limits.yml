@@ -1,6 +1,7 @@
 generated: '2026-08-14'
 method: probed
 source: live responses from https://api.avarra.ai on 2026-08-14
+name: Avarra API Rate Limits
 limit_count: 0
 limits: []
 headers: []

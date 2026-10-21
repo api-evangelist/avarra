@@ -58,6 +58,7 @@ health_check:
   body: '{"status":"ok"}'
   authenticated: false
 idempotency:
+  coverage: none
   supported: unknown
   header: null
   evidence: >-
@@ -68,8 +69,10 @@ pagination:
   style: unknown
   evidence: no collection endpoint is reachable unauthenticated and no docs are published
 field_expansion:
+  coverage: none
   supported: unknown
 metadata:
+  coverage: none
   supported: unknown
 request_tracing:
   request_id_header: false

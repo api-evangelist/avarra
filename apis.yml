@@ -1,4 +1,5 @@
 aid: avarra
+
 deliveryModel:
   model: saas
   open_source: false
@@ -10,6 +11,7 @@ deliveryModel:
   - pricing
   generated: '2026-08-28'
   method: derived
+
 accessModel:
   pricing: unknown
   onboarding: unknown
@@ -21,8 +23,11 @@ accessModel:
   source: []
   generated: '2026-07-22'
   method: derived
+
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/avarra.png
+
 name: Avarra
+
 description: 'Avarra is an AI-powered sales training and enablement platform, operated by Ramp Systems,
   Inc., that helps revenue teams onboard, coach, and certify sales representatives at scale. The platform
   turns real sales conversations into AI-avatar role-play simulations delivered over Zoom, gives reps
@@ -34,16 +39,26 @@ description: 'Avarra is an AI-powered sales training and enablement platform, op
   RFC 8414 OAuth 2.0 authorization server metadata and an RFC 7517 JWKS anonymously, but the entire /v1
   resource surface is closed behind OAuth 2.0 client-credentials access and the company publishes no OpenAPI,
   developer portal, API reference, SDKs, or pricing.'
+
 url: https://raw.githubusercontent.com/api-evangelist/avarra/refs/heads/main/apis.yml
+
 x-type: company
+
 x-source: vc-portfolio
+
 x-backed-by:
 - lightspeed-venture-partners
-x-tier: stub
-x-tier-reason: portfolio-lead
+
+x-tier: profiled
+
+x-tier-reason: enrichment pass 2026-10-20 (local-v5; was portfolio-lead)
+
 specificationVersion: '0.23'
+
 created: '2026-07-17'
+
 modified: '2026-08-14'
+
 tags:
 - Company
 - Sales Enablement
@@ -55,6 +70,7 @@ tags:
 - Onboarding
 - Sales Readiness
 - Conversation Intelligence
+
 tags_raw:
 - Company
 - Sales Enablement
@@ -66,6 +82,51 @@ tags_raw:
 - Onboarding
 - Sales Readiness
 - Conversation Intelligence
+
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
+- FN: APIs.json
+  email: info@apis.io
+
+common:
+- type: Deprecation
+  url: lifecycle/avarra-lifecycle.yml
+- type: Hosts
+  url: hosts/avarra-hosts.yml
+- type: Vendors
+  url: vendors/avarra-vendors.yml
+- type: DomainSecurity
+  url: security/avarra-domain-security.yml
+- type: Website
+  url: https://www.avarra.ai
+- type: SignUp
+  url: https://www.avarra.ai/request-a-demo
+- type: Login
+  url: https://app.avarra.ai/login
+- type: Support
+  url: mailto:support@avarra.ai
+- type: PrivacyPolicy
+  url: https://www.avarra.ai/legal/privacy-policy
+- type: Compliance
+  url: https://www.avarra.ai/product
+- type: TermsOfService
+  url: https://www.avarra.ai/msa
+- type: Blog
+  url: https://www.avarra.ai/blog
+- type: StatusPage
+  url: https://status.avarra.ai
+- type: WellKnown
+  url: well-known/avarra-well-known.yml
+- type: Conventions
+  url: conventions/avarra-conventions.yml
+- type: Lifecycle
+  url: lifecycle/avarra-lifecycle.yml
+- type: Conformance
+  url: conformance/avarra-conformance.yml
+- type: RateLimits
+  url: rate-limits/avarra-rate-limits.yml
+
 apis:
 - aid: avarra:avarra-api
   name: Avarra API
@@ -89,61 +150,30 @@ apis:
   - Sales Training
   - AI
   properties:
-  - type: Authentication
-    url: authentication/avarra-authentication.yml
   - type: WellKnown
     url: well-known/avarra-well-known.yml
   - type: Conventions
     url: conventions/avarra-conventions.yml
-  - type: ErrorCatalog
-    url: errors/avarra-problem-types.yml
-common:
-- type: DomainSecurity
-  url: security/avarra-domain-security.yml
-- type: Website
-  url: https://www.avarra.ai
-- type: SignUp
-  url: https://www.avarra.ai/request-a-demo
-- type: Support
-  url: mailto:support@avarra.ai
-- type: PrivacyPolicy
-  url: https://www.avarra.ai/legal/privacy-policy
-- type: Compliance
-  url: https://www.avarra.ai/product
-- type: TermsOfService
-  url: https://www.avarra.ai/msa
-- type: Blog
-  url: https://www.avarra.ai/blog
-- type: StatusPage
-  url: https://status.avarra.ai
-- type: Authentication
-  url: authentication/avarra-authentication.yml
-- type: WellKnown
-  url: well-known/avarra-well-known.yml
-- type: Conventions
-  url: conventions/avarra-conventions.yml
-- type: ErrorCatalog
-  url: errors/avarra-problem-types.yml
-- type: Lifecycle
-  url: lifecycle/avarra-lifecycle.yml
-- type: Conformance
-  url: conformance/avarra-conformance.yml
-- type: Plans
-  url: plans/avarra-plans-pricing.yml
-- type: RateLimits
-  url: rate-limits/avarra-rate-limits.yml
-- type: LLMsTxt
-  url: llms/avarra-llms.txt
-maintainers:
-- FN: Kin Lane
-  email: kin@apievangelist.com
-- FN: APIs.json
-  email: info@apis.io
+
 x-enrichment:
-  date: '2026-08-14'
-  status: enriched
-  artifacts_added: 11
-  pass: local-v1
+  date: '2026-10-20'
+  status: minimal
+  artifacts_added: 0
+  pass: local-v5
+
+x-coverage:
+  state: gated
+  reason: sales-gate
+  detail: api.avarra.ai serves anonymous OAuth metadata and a JWKS, but every /v1 resource returns a JSON 401, no OpenAPI or docs are published, and access runs through the request-a-demo form.
+  evidence:
+  - url: https://api.avarra.ai/.well-known/oauth-authorization-server
+    status: 200
+  - url: https://www.avarra.ai/pricing
+    status: 404
+  - url: https://www.avarra.ai/request-a-demo
+    status: 200
+  checked: '2026-10-20'
+
 x-contract-discovery:
   checked: '2026-08-14'
   finding: The prior profile recorded "no public developer API"; that was wrong. api.avarra.ai is a live

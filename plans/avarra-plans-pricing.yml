@@ -1,8 +1,11 @@
 generated: '2026-08-14'
-method: searched
+method: none
 source: https://www.avarra.ai/ (full site + sitemap.xml walk, 2026-08-14)
+name: Avarra pricing
+audience: unclear
+pricing_basis: negotiated
+published: false
 plan_count: 0
-currency: null
 plans: []
 note: >-
   Avarra publishes no pricing page and no plan tiers. https://www.avarra.ai/pricing
